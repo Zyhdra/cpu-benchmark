@@ -1,0 +1,27 @@
+CPU BENCHMARK RESULTS - SORTING
+================================
+
+System Info
+-----------
+Name:              Steven Kertes
+CPU Model:         Intel Core i9-12900K
+CPU Cores/Threads: 16 cores (8 Performance + 8 Efficient) / 24 threads
+OS / Environment:  WSL2 on Windows
+
+=====================================================
+SORTING BENCHMARK (n=50,000)
+=====================================================
+Algorithm            Time (ms)         Cycles       Operations
+---------            ---------         ------       ----------
+Bubble Sort           4385.19   13,732,329,495    1,878,808,227
+Merge Sort               3.82       11,955,974          784,464
+Quick Sort               2.26        7,088,436        1,396,849
+
+=====================================================
+KEY OBSERVATIONS
+=====================================================
+- Bubble Sort was the slowest algorithm by a large margin
+- Merge Sort and Quick Sort were significantly faster than Bubble Sort
+- Quick Sort finished slightly faster than Merge Sort
+- Bubble Sort performed far more operations than the other two algorithms
+- Merge Sort and Quick Sort had much lower cycle counts than Bubble Sort
