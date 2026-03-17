@@ -1,0 +1,54 @@
+# CPU Benchmark - Setup & Instructions
+
+## What Each Person Needs to Do
+- **Steven** — Sorting (done)
+- **Teammate 1** — Search (linear vs binary)
+- **Teammate 2** — Matrix Multiply (naive vs cache-friendly)
+
+Your code must output Time (ms), Cycles, and Operations — same format as sorting.c.
+Once everyone has written their algorithm, each person runs all three on their own machine.
+
+---
+
+## Setup
+
+### Windows
+1. Open PowerShell as Administrator and run:
+```
+   wsl --install
+```
+2. Restart your PC, then open the Ubuntu app ( You might already have this installed so no need for restart)
+3. Run:
+```
+   sudo apt update && sudo apt install -y gcc make
+```
+
+### Mac
+1. Open Terminal and run:
+```
+   brew install gcc
+```
+
+---
+
+## Running the Benchmarks
+
+1. Clone the repo:
+```
+   git clone https://github.com/Zyhdra/cpu-benchmark.git
+```
+2. Navigate into the folder:
+```
+   cd cpu-benchmark
+```
+3. Compile and run an algorithm:
+```
+   gcc -O2 -o sorting algorithms/sorting.c && ./sorting
+```
+4. Repeat for each algorithm once they are added
+
+---
+
+## Saving Your Results
+Save your results in the `results/` folder as `yourname_results.txt`
+Use the same format as `results/steven_results.txt` as a reference.
