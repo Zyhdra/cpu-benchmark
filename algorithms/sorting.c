@@ -19,6 +19,20 @@ static inline uint64_t rdtsc() {
 }
 
 /*
+ * load_from_file - reads integers from a text file into an array
+ * The first line of the file is the count, followed by one integer per line.
+ */
+void load_from_file(int *arr, int n, const char *filename) {
+    FILE *f = fopen(filename, "r");
+    if (!f) { fprintf(stderr, "Could not open %s\n", filename); exit(1); }
+    int count;
+    fscanf(f, "%d", &count);  // read the first line (50000)
+    for (int i = 0; i < n; i++)
+        fscanf(f, "%d", &arr[i]);
+    fclose(f);
+}
+
+/*
  * bubble_sort - O(n^2) sorting algorithm
  * Repeatedly steps through the array, compares adjacent elements,
  * and swaps them if they are in the wrong order.
@@ -123,12 +137,6 @@ void quick_sort(int *arr, int low, int high) {
     }
 }
 
-/* fill_random - fills array with random integers between 0 and 99999 */
-void fill_random(int *arr, int n) {
-    for (int i = 0; i < n; i++)
-        arr[i] = rand() % 100000;
-}
-
 /* elapsed_ms - calculates time difference between two timestamps in milliseconds */
 double elapsed_ms(struct timespec start, struct timespec end) {
     return (end.tv_sec - start.tv_sec) * 1000.0
@@ -136,8 +144,10 @@ double elapsed_ms(struct timespec start, struct timespec end) {
 }
 
 int main(void) {
-    srand(42);  // fixed seed so results are reproducible across runs
     int *arr = malloc(SIZE * sizeof(int));
+    int *original = malloc(SIZE * sizeof(int));
+    load_from_file(original, SIZE, "data/sorting_data.txt");
+
     struct timespec t0, t1;  // wall clock timestamps
     uint64_t c0, c1;         // cycle counter timestamps
 
@@ -146,17 +156,17 @@ int main(void) {
     printf("%-20s %12s %15s %15s\n", "---------", "---------", "------", "----------");
 
     // --- Bubble Sort ---
-    fill_random(arr, SIZE);
-    c0 = rdtsc();                          // start cycle count
-    clock_gettime(CLOCK_MONOTONIC, &t0);   // start wall clock
+    memcpy(arr, original, SIZE * sizeof(int));
+    c0 = rdtsc();
+    clock_gettime(CLOCK_MONOTONIC, &t0);
     long long bops = bubble_sort(arr, SIZE);
-    clock_gettime(CLOCK_MONOTONIC, &t1);   // stop wall clock
-    c1 = rdtsc();                          // stop cycle count
+    clock_gettime(CLOCK_MONOTONIC, &t1);
+    c1 = rdtsc();
     printf("%-20s %12.2f %15lu %15lld\n", "Bubble Sort", elapsed_ms(t0, t1), c1 - c0, bops);
 
     // --- Merge Sort ---
-    fill_random(arr, SIZE);
-    merge_ops = 0;  // reset global op counter
+    memcpy(arr, original, SIZE * sizeof(int));
+    merge_ops = 0;
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
     merge_sort(arr, 0, SIZE - 1);
@@ -165,8 +175,8 @@ int main(void) {
     printf("%-20s %12.2f %15lu %15lld\n", "Merge Sort", elapsed_ms(t0, t1), c1 - c0, merge_ops);
 
     // --- Quick Sort ---
-    fill_random(arr, SIZE);
-    quick_ops = 0;  // reset global op counter
+    memcpy(arr, original, SIZE * sizeof(int));
+    quick_ops = 0;
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
     quick_sort(arr, 0, SIZE - 1);
@@ -174,6 +184,7 @@ int main(void) {
     c1 = rdtsc();
     printf("%-20s %12.2f %15lu %15lld\n", "Quick Sort", elapsed_ms(t0, t1), c1 - c0, quick_ops);
 
+    free(original);
     free(arr);
     return 0;
 }
