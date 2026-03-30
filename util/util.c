@@ -11,9 +11,20 @@ void load_from_file(int *arr, int n, const char *filename) {
     FILE *f = fopen(filename, "r");
     if (!f) { fprintf(stderr, "Could not open %s\n", filename); exit(1); }
     int count;
-    fscanf(f, "%d", &count);  // read the first line (50000)
-    for (int i = 0; i < n; i++)
-        fscanf(f, "%d", &arr[i]);
+    if (fscanf(f, "%d", &count) != 1) {
+        fprintf(stderr, "Failed to read count from %s\n", filename);
+        fclose(f); exit(1);
+    }
+    if (n > count) {
+        fprintf(stderr, "Requested %d elements but file only contains %d\n", n, count);
+        fclose(f); exit(1);
+    }
+    for (int i = 0; i < n; i++) {
+        if (fscanf(f, "%d", &arr[i]) != 1) {
+            fprintf(stderr, "Failed to read element %d from %s\n", i, filename);
+            fclose(f); exit(1);
+        }
+    }
     fclose(f);
 }
 
