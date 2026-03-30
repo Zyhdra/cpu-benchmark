@@ -6,8 +6,8 @@ BINS    = sorting
 
 all: $(BINS)
 
-sorting: algorithms/sorting.c
-	$(CC) $(CFLAGS) -o $@ $
+sorting: algorithms/sorting.c util/util.c
+	$(CC) $(CFLAGS) -o $@ $^
 
 run: all
 	@echo "\n=== SORTING ===" && ./sorting
