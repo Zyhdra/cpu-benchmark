@@ -3,8 +3,7 @@
 #include <string.h>
 #include <time.h>
 #include "../util/util.h"
-
-#define SIZE 50000  // Number of elements to sort
+#include "../data/dataset.h"
 
 /*
  * bubble_sort - O(n^2) sorting algorithm
@@ -112,40 +111,39 @@ void quick_sort(int *arr, int low, int high) {
 }
 
 int main(void) {
-    int *arr = malloc(SIZE * sizeof(int));
-    int *original = malloc(SIZE * sizeof(int));
-    load_from_file(original, SIZE, "data/sorting_data.txt");
+    int *original = alloc_dataset();
+    int *arr = malloc(DATASET_SIZE * sizeof(int));
 
     struct timespec t0, t1;  // wall clock timestamps
     uint64_t c0, c1;         // cycle counter timestamps
 
-    print_bench_header("SORTING", SIZE);
+    print_bench_header("SORTING", DATASET_SIZE);
 
     // --- Bubble Sort ---
-    memcpy(arr, original, SIZE * sizeof(int));
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
-    long long bops = bubble_sort(arr, SIZE);
+    long long bops = bubble_sort(arr, DATASET_SIZE);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
     print_bench_row("Bubble Sort", elapsed_ms(t0, t1), c1 - c0, bops);
 
     // --- Merge Sort ---
-    memcpy(arr, original, SIZE * sizeof(int));
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
     merge_ops = 0;
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
-    merge_sort(arr, 0, SIZE - 1);
+    merge_sort(arr, 0, DATASET_SIZE - 1);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
     print_bench_row("Merge Sort", elapsed_ms(t0, t1), c1 - c0, merge_ops);
 
     // --- Quick Sort ---
-    memcpy(arr, original, SIZE * sizeof(int));
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
     quick_ops = 0;
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
-    quick_sort(arr, 0, SIZE - 1);
+    quick_sort(arr, 0, DATASET_SIZE - 1);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
     print_bench_row("Quick Sort", elapsed_ms(t0, t1), c1 - c0, quick_ops);

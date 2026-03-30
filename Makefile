@@ -6,7 +6,7 @@ BINS    = sorting
 
 all: $(BINS)
 
-sorting: algorithms/sorting.c util/util.c
+sorting: algorithms/sorting.c util/util.c data/dataset.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 run: all
