@@ -111,12 +111,6 @@ void quick_sort(int *arr, int low, int high) {
     }
 }
 
-/* elapsed_ms - calculates time difference between two timestamps in milliseconds */
-double elapsed_ms(struct timespec start, struct timespec end) {
-    return (end.tv_sec - start.tv_sec) * 1000.0
-        + (end.tv_nsec - start.tv_nsec) / 1e6;
-}
-
 int main(void) {
     int *arr = malloc(SIZE * sizeof(int));
     int *original = malloc(SIZE * sizeof(int));
@@ -125,9 +119,7 @@ int main(void) {
     struct timespec t0, t1;  // wall clock timestamps
     uint64_t c0, c1;         // cycle counter timestamps
 
-    printf("=== SORTING BENCHMARK (n=%d) ===\n\n", SIZE);
-    printf("%-20s %12s %15s %15s\n", "Algorithm", "Time (ms)", "Cycles", "Operations");
-    printf("%-20s %12s %15s %15s\n", "---------", "---------", "------", "----------");
+    print_bench_header("SORTING", SIZE);
 
     // --- Bubble Sort ---
     memcpy(arr, original, SIZE * sizeof(int));
@@ -136,7 +128,7 @@ int main(void) {
     long long bops = bubble_sort(arr, SIZE);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    printf("%-20s %12.2f %15lu %15lld\n", "Bubble Sort", elapsed_ms(t0, t1), c1 - c0, bops);
+    print_bench_row("Bubble Sort", elapsed_ms(t0, t1), c1 - c0, bops);
 
     // --- Merge Sort ---
     memcpy(arr, original, SIZE * sizeof(int));
@@ -146,7 +138,7 @@ int main(void) {
     merge_sort(arr, 0, SIZE - 1);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    printf("%-20s %12.2f %15lu %15lld\n", "Merge Sort", elapsed_ms(t0, t1), c1 - c0, merge_ops);
+    print_bench_row("Merge Sort", elapsed_ms(t0, t1), c1 - c0, merge_ops);
 
     // --- Quick Sort ---
     memcpy(arr, original, SIZE * sizeof(int));
@@ -156,7 +148,7 @@ int main(void) {
     quick_sort(arr, 0, SIZE - 1);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    printf("%-20s %12.2f %15lu %15lld\n", "Quick Sort", elapsed_ms(t0, t1), c1 - c0, quick_ops);
+    print_bench_row("Quick Sort", elapsed_ms(t0, t1), c1 - c0, quick_ops);
 
     free(original);
     free(arr);
