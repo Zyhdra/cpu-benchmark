@@ -1,0 +1,25 @@
+CPU BENCHMARK RESULTS - SORTING
+================================
+
+System Info
+-----------
+Name:              Justin Andrade
+CPU Model:         Apple M2 Pro
+CPU Cores/Threads: 12 cores (8 performance + 4 efficiency) / 12 threads
+OS / Environment:  macOS
+
+=====================================================
+SORTING BENCHMARK (n=50,000)
+=====================================================
+Algorithm               Time (ms)      Operations
+---------               ---------      ----------
+Bubble Sort               4322.15      1875992869
+Merge Sort                   6.53          784464
+Quick Sort                   4.08         1409127
+
+=====================================================
+KEY OBSERVATIONS
+=====================================================
+- Bubble sort took the longest time and did the most operations (as expected)
+- Quick sort performed a lot more operations than merge sort but finished about 2ms faster than merge sort
+- Merge sort performed the least amount of operations but was not the fastest
