@@ -2,35 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <stdint.h>
-
-#define SIZE 50000  // Number of elements to sort
-
-/*
- * rdtsc - Read Time Stamp Counter
- * Uses an x86 assembly instruction to read the CPU's internal cycle counter.
- * Returns the number of clock cycles since the processor was last reset.
- * We use this to measure how many CPU cycles each algorithm takes.
- */
-static inline uint64_t rdtsc() {
-    uint32_t lo, hi;
-    __asm__ __volatile__ ("rdtsc" : "=a"(lo), "=d"(hi));
-    return ((uint64_t)hi << 32) | lo;
-}
-
-/*
- * load_from_file - reads integers from a text file into an array
- * The first line of the file is the count, followed by one integer per line.
- */
-void load_from_file(int *arr, int n, const char *filename) {
-    FILE *f = fopen(filename, "r");
-    if (!f) { fprintf(stderr, "Could not open %s\n", filename); exit(1); }
-    int count;
-    fscanf(f, "%d", &count);  // read the first line (50000)
-    for (int i = 0; i < n; i++)
-        fscanf(f, "%d", &arr[i]);
-    fclose(f);
-}
+#include "../util/util.h"
+#include "../data/dataset.h"
 
 /*
  * bubble_sort - O(n^2) sorting algorithm
@@ -137,52 +110,43 @@ void quick_sort(int *arr, int low, int high) {
     }
 }
 
-/* elapsed_ms - calculates time difference between two timestamps in milliseconds */
-double elapsed_ms(struct timespec start, struct timespec end) {
-    return (end.tv_sec - start.tv_sec) * 1000.0
-        + (end.tv_nsec - start.tv_nsec) / 1e6;
-}
-
 int main(void) {
-    int *arr = malloc(SIZE * sizeof(int));
-    int *original = malloc(SIZE * sizeof(int));
-    load_from_file(original, SIZE, "data/sorting_data.txt");
+    int *original = alloc_dataset();
+    int *arr = malloc(DATASET_SIZE * sizeof(int));
 
     struct timespec t0, t1;  // wall clock timestamps
     uint64_t c0, c1;         // cycle counter timestamps
 
-    printf("=== SORTING BENCHMARK (n=%d) ===\n\n", SIZE);
-    printf("%-20s %12s %15s %15s\n", "Algorithm", "Time (ms)", "Cycles", "Operations");
-    printf("%-20s %12s %15s %15s\n", "---------", "---------", "------", "----------");
+    print_bench_header("SORTING", DATASET_SIZE);
 
     // --- Bubble Sort ---
-    memcpy(arr, original, SIZE * sizeof(int));
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
-    long long bops = bubble_sort(arr, SIZE);
+    long long bops = bubble_sort(arr, DATASET_SIZE);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    printf("%-20s %12.2f %15lu %15lld\n", "Bubble Sort", elapsed_ms(t0, t1), c1 - c0, bops);
+    print_bench_row("Bubble Sort", elapsed_ms(t0, t1), c1 - c0, bops);
 
     // --- Merge Sort ---
-    memcpy(arr, original, SIZE * sizeof(int));
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
     merge_ops = 0;
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
-    merge_sort(arr, 0, SIZE - 1);
+    merge_sort(arr, 0, DATASET_SIZE - 1);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    printf("%-20s %12.2f %15lu %15lld\n", "Merge Sort", elapsed_ms(t0, t1), c1 - c0, merge_ops);
+    print_bench_row("Merge Sort", elapsed_ms(t0, t1), c1 - c0, merge_ops);
 
     // --- Quick Sort ---
-    memcpy(arr, original, SIZE * sizeof(int));
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
     quick_ops = 0;
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
-    quick_sort(arr, 0, SIZE - 1);
+    quick_sort(arr, 0, DATASET_SIZE - 1);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    printf("%-20s %12.2f %15lu %15lld\n", "Quick Sort", elapsed_ms(t0, t1), c1 - c0, quick_ops);
+    print_bench_row("Quick Sort", elapsed_ms(t0, t1), c1 - c0, quick_ops);
 
     free(original);
     free(arr);
