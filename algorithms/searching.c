@@ -27,6 +27,14 @@ long long binary_search(int *arr, int n, int target) {
     return ops;
 }
 
+/*
+ * get_random_value - returns a random value from the dataset
+ * Picks a random index and returns the element at that position.
+ */
+int get_random_value(int *arr, int n) {
+    return arr[rand() % n];
+}
+
 int main(void) {
     int *original = alloc_dataset();
     int *arr = malloc(DATASET_SIZE * sizeof(int));
@@ -53,6 +61,25 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
     print_bench_row("Binary Search", elapsed_ms(t0, t1), c1 - c0, bops);
+
+    // --- Linear Search (Random Value) ---
+    int target = get_random_value(original, DATASET_SIZE);
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
+    c0 = rdtsc();
+    clock_gettime(CLOCK_MONOTONIC, &t0);
+    lops = linear_search(arr, DATASET_SIZE, target);
+    clock_gettime(CLOCK_MONOTONIC, &t1);
+    c1 = rdtsc();
+    print_bench_row("Linear Search (Random)", elapsed_ms(t0, t1), c1 - c0, lops);
+
+    // --- Binary Search (Random Value) ---
+    memcpy(arr, original, DATASET_SIZE * sizeof(int));
+    c0 = rdtsc();
+    clock_gettime(CLOCK_MONOTONIC, &t0);
+    bops = binary_search(arr, DATASET_SIZE, target);
+    clock_gettime(CLOCK_MONOTONIC, &t1);
+    c1 = rdtsc();
+    print_bench_row("Binary Search (Random)", elapsed_ms(t0, t1), c1 - c0, bops);
 
     free(original);
     free(arr);
