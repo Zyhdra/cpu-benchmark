@@ -24,3 +24,7 @@ void binary_search(int *arr, int n, int target) {
         else right = mid - 1;
     }
 }
+
+int main(void) {
+    
+}
