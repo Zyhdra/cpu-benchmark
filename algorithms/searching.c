@@ -11,7 +11,7 @@ long long linear_search(int *arr, int n, int target) {
         ops++;
         if (arr[i] == target) return ops;  // found target
     }
-    return ops;
+    return -ops;  // not found, return negative ops
 }
 
 long long binary_search(int *arr, int n, int target) {
@@ -24,7 +24,7 @@ long long binary_search(int *arr, int n, int target) {
         else if (arr[mid] < target) left = mid + 1;
         else right = mid - 1;
     }
-    return ops;
+    return -ops;  // not found, return negative ops
 }
 
 /*
@@ -44,23 +44,27 @@ int main(void) {
 
     print_bench_header("SEARCH", DATASET_SIZE);
 
-    // --- Linear Search ---
+    // --- Linear Search (Not Found) ---
     memcpy(arr, original, DATASET_SIZE * sizeof(int));
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
     long long lops = linear_search(arr, DATASET_SIZE, -1);  // search for value not in dataset
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    print_bench_row("Linear Search", elapsed_ms(t0, t1), c1 - c0, lops);
+    char lname[64];
+    sprintf(lname, "Linear Search%s", lops < 0 ? " (Not Found)" : "");
+    print_bench_row(lname, elapsed_ms(t0, t1), c1 - c0, llabs(lops));
 
-    // --- Binary Search ---
+    // --- Binary Search (Not Found) ---
     memcpy(arr, original, DATASET_SIZE * sizeof(int));
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
     long long bops = binary_search(arr, DATASET_SIZE, -1);  // search for value not in dataset
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    print_bench_row("Binary Search", elapsed_ms(t0, t1), c1 - c0, bops);
+    char bname[64];
+    sprintf(bname, "Binary Search%s", bops < 0 ? " (Not Found)" : "");
+    print_bench_row(bname, elapsed_ms(t0, t1), c1 - c0, llabs(bops));
 
     // --- Linear Search (Random Value) ---
     int target = get_random_value(original, DATASET_SIZE);
@@ -70,7 +74,8 @@ int main(void) {
     lops = linear_search(arr, DATASET_SIZE, target);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    print_bench_row("Linear Search (Random)", elapsed_ms(t0, t1), c1 - c0, lops);
+    sprintf(lname, "Linear Search (Random)%s", lops < 0 ? " (Not Found)" : "");
+    print_bench_row(lname, elapsed_ms(t0, t1), c1 - c0, llabs(lops));
 
     // --- Binary Search (Random Value) ---
     memcpy(arr, original, DATASET_SIZE * sizeof(int));
@@ -79,7 +84,8 @@ int main(void) {
     bops = binary_search(arr, DATASET_SIZE, target);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    print_bench_row("Binary Search (Random)", elapsed_ms(t0, t1), c1 - c0, bops);
+    sprintf(bname, "Binary Search (Random)%s", bops < 0 ? " (Not Found)" : "");
+    print_bench_row(bname, elapsed_ms(t0, t1), c1 - c0, llabs(bops));
 
     free(original);
     free(arr);
