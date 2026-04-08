@@ -11,11 +11,11 @@ OS / Environment:  macOS
 =====================================================
 SORTING BENCHMARK (n=50,000)
 =====================================================
-Algorithm               Time (ms)      Operations
----------               ---------      ----------
-Bubble Sort               4322.15      1875992869
-Merge Sort                   6.53          784464
-Quick Sort                   4.08         1409127
+Algorithm               Time (ms)           Ticks      Operations
+---------               ---------           -----      ----------
+Bubble Sort               4353.88       104493042      1875992869
+Merge Sort                   6.94          166666          784464
+Quick Sort                   4.08           97932         1409127
 
 =====================================================
 KEY OBSERVATIONS
