@@ -1,0 +1,24 @@
+CPU BENCHMARK RESULTS - SORTING
+================================
+
+System Info
+-----------
+Name:              Justin Andrade
+CPU Model:         Ryzen 5 9600x
+CPU Cores/Threads: 6 cores / 12 threads
+OS / Environment:  WSL2 on Windows
+
+=====================================================
+SORTING BENCHMARK (n=50,000)
+=====================================================
+Algorithm               Time (ms)          Cycles      Operations
+---------               ---------          ------      ----------
+Bubble Sort               2911.49     11,056,862,311      1,875,992,869
+Merge Sort                   3.15        11,976,783          784,464
+Quick Sort                   1.99         7,561,476         1,409,127
+
+=====================================================
+KEY OBSERVATIONS
+=====================================================
+- Bubble sort was the slowest (as expected)
+- Quick sort was the fastest algorithm while having the 2nd highest operations
