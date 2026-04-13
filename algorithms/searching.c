@@ -5,6 +5,11 @@
 #include "../util/util.h"
 #include "../data/dataset.h"
 
+/* Comparator for qsort */
+static int compare_ints(const void *a, const void *b) {
+    return *(int*)a - *(int*)b;
+}
+
 long long linear_search(int *arr, int n, int target) {
     long long ops = 0;
     for (int i = 0; i < n; i++) {
@@ -52,18 +57,19 @@ int main(void) {
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
     char lname[64];
-    sprintf(lname, "Linear Search%s", lops < 0 ? " (Not Found)" : "");
+    sprintf(lname, "Linear Search%s", lops < 0 ? " (NF)" : "");
     print_bench_row(lname, elapsed_ms(t0, t1), c1 - c0, llabs(lops));
 
     // --- Binary Search (Not Found) ---
     memcpy(arr, original, DATASET_SIZE * sizeof(int));
+    qsort(arr, DATASET_SIZE, sizeof(int), compare_ints);
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
     long long bops = binary_search(arr, DATASET_SIZE, -1);  // search for value not in dataset
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
     char bname[64];
-    sprintf(bname, "Binary Search%s", bops < 0 ? " (Not Found)" : "");
+    sprintf(bname, "Binary Search%s", bops < 0 ? " (NF)" : "");
     print_bench_row(bname, elapsed_ms(t0, t1), c1 - c0, llabs(bops));
 
     // --- Linear Search (Random Value) ---
@@ -74,17 +80,18 @@ int main(void) {
     lops = linear_search(arr, DATASET_SIZE, target);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    sprintf(lname, "Linear Search (Random)%s", lops < 0 ? " (Not Found)" : "");
+    sprintf(lname, "Linear Search%s", lops < 0 ? " (NF)" : "");
     print_bench_row(lname, elapsed_ms(t0, t1), c1 - c0, llabs(lops));
 
     // --- Binary Search (Random Value) ---
     memcpy(arr, original, DATASET_SIZE * sizeof(int));
+    qsort(arr, DATASET_SIZE, sizeof(int), compare_ints);
     c0 = rdtsc();
     clock_gettime(CLOCK_MONOTONIC, &t0);
     bops = binary_search(arr, DATASET_SIZE, target);
     clock_gettime(CLOCK_MONOTONIC, &t1);
     c1 = rdtsc();
-    sprintf(bname, "Binary Search (Random)%s", bops < 0 ? " (Not Found)" : "");
+    sprintf(bname, "Binary Search%s", bops < 0 ? " (NF)" : "");
     print_bench_row(bname, elapsed_ms(t0, t1), c1 - c0, llabs(bops));
 
     free(original);
