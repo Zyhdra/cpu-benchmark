@@ -1,0 +1,30 @@
+CPU BENCHMARK RESULTS - SORTING & SEARCHING
+================================
+
+System Info
+-----------
+Name:              Jordan Burton
+CPU Model:         Intel Core I3-1125
+CPU Cores/Threads: 4 Cores and 8 Threads
+OS / Environment:  Ubuntu on Windows
+
+=====================================================
+SORTING + SEARCHING BENCHMARK (n=50000) 
+=====================================================
+
+Algorithm               Time (ms)          Cycles      Operations
+---------               ---------          ------      ----------
+Bubble Sort               6749.32     13477107640      1875992869
+Merge Sort                  10.71        21392005          784464
+Quick Sort                   4.16         8305406         1409127
+Linear Search                0.01           18218           25001
+Binary Search                0.00             790              14
+
+=====================================================
+KEY OBSERVATIONS
+=====================================================
+- Bubble Sort was the slowest algorithm by a large margin
+- Merge Sort and Quick Sort were significantly faster than Bubble Sort
+- Quick Sort finished slightly faster than Merge Sort
+- Bubble Sort performed far more operations than the other two algorithms
+- Merge Sort and Quick Sort had much lower cycle counts than Bubble Sort
