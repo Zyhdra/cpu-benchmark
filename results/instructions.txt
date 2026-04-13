@@ -2,7 +2,7 @@
 
 ## What Each Person Needs to Do
 - **Steven** — Sorting (done)
-- **Teammate 1** — Search (linear vs binary)
+- **Jordan** — Search (linear vs binary)
 - **Teammate 2** — Matrix Multiply (naive vs cache-friendly)
 
 Your code must output Time (ms), Cycles, and Operations — same format as sorting.c.

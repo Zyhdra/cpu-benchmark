@@ -1,16 +1,25 @@
 CC      = gcc
-CFLAGS  = -O2 -Wall
-BINS    = sorting
+CFLAGS  = -O2 -Wall -lm
+SRCDIR  = algorithms
+BINS    = sorting searching matrix
 
 .PHONY: all clean run
 
 all: $(BINS)
 
-sorting: algorithms/sorting.c util/util.c data/dataset.c
+sorting: $(SRCDIR)/sorting.c util/util.c data/dataset.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+searching: $(SRCDIR)/searching.c util/util.c data/dataset.c
+	$(CC) $(CFLAGS) -o $@ $^
+
+matrix: $(SRCDIR)/matrix.c util/util.c
 	$(CC) $(CFLAGS) -o $@ $^
 
 run: all
 	@echo "\n=== SORTING ===" && ./sorting
+	@echo "\n=== SEARCH ===" && ./searching
+	@echo "\n=== MATRIX MULTIPLY ===" && ./matrix
 
 clean:
 	rm -f $(BINS)
