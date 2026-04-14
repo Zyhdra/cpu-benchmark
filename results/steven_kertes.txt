@@ -25,3 +25,22 @@ KEY OBSERVATIONS
 - Quick Sort finished slightly faster than Merge Sort
 - Bubble Sort performed far more operations than the other two algorithms
 - Merge Sort and Quick Sort had much lower cycle counts than Bubble Sort
+
+=====================================================
+SEARCH BENCHMARK (n=50,000)
+=====================================================
+Algorithm               Time (ms)          Cycles      Operations
+---------               ---------          ------      ----------
+Linear Search (NF)           0.01           52167           50000
+Binary Search (NF)           0.00            1287              15
+Linear Search                0.01           26515           39384
+Binary Search                0.00            1332              15
+
+=====================================================
+KEY OBSERVATIONS
+=====================================================
+- Binary Search was faster than Linear Search in all cases
+- Binary Search only needed 15 comparisons regardless of whether the target was found
+- Linear Search (NF) had to check all 50,000 elements before giving up
+- Linear Search found the random target around the 39,384th element
+- Binary Search had drastically lower cycle counts than Linear Search
